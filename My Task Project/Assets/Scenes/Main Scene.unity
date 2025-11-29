@@ -10905,6 +10905,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -10995,7 +10996,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0
   far clip plane: 1000
   field of view: 34
   orthographic: 1
@@ -11030,6 +11031,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd4b2fe088777594aa42ac976de266af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
+  _targetTransform: {fileID: 9180895740247639926}
+  followUpdateTime: 0.2
 --- !u!1 &578923369
 GameObject:
   m_ObjectHideFlags: 0
@@ -24091,7 +24106,7 @@ Grid:
   m_GameObject: {fileID: 989133513}
   m_Enabled: 1
   m_CellSize: {x: 1, y: 1, z: 0}
-  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellGap: {x: -0.0001, y: -0.0001, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
 --- !u!4 &989133515
@@ -45337,18 +45352,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2109022582085618735, guid: b16f8fba703d2424ea0fa47d75596b9a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109022582085618735, guid: b16f8fba703d2424ea0fa47d75596b9a, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109022582085618735, guid: b16f8fba703d2424ea0fa47d75596b9a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109022582085618735, guid: b16f8fba703d2424ea0fa47d75596b9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 23.37
       objectReference: {fileID: 0}
@@ -45397,6 +45400,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b16f8fba703d2424ea0fa47d75596b9a, type: 3}
+--- !u!4 &9180895740247639926 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2109022582085618735, guid: b16f8fba703d2424ea0fa47d75596b9a, type: 3}
+  m_PrefabInstance: {fileID: 9180895740247639925}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
