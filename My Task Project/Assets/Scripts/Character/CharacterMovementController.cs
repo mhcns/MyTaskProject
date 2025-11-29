@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 public class CharacterMovementController : MonoBehaviour
 {
     private Rigidbody2D _rb;
+    private AnimatorController _animatorController;
     private Vector2 _inputVector;
-    private bool _hasMoved = false;
     private Vector3 _forceDirection;
 
     [SerializeField]
@@ -18,11 +18,13 @@ public class CharacterMovementController : MonoBehaviour
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _animatorController = GetComponent<AnimatorController>();
     }
 
     public void OnMove(InputValue value)
     {
         _inputVector = value.Get<Vector2>();
+        _animatorController.Move(_inputVector);
     }
 
     void FixedUpdate()
