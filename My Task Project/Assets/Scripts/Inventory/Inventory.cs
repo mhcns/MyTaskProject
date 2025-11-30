@@ -26,11 +26,20 @@ public class Inventory : MonoBehaviour
         {
             if (!_items.ContainsKey(i))
             {
-                Item newItem = new(item.nameId, item.itemDescription);
-                Debug.Log($"adding {newItem.nameId} to slot {i}");
-                _items.Add(i, newItem);
-                InventoryUIController.Instance.AddItem(newItem, i);
-                Destroy(item.gameObject);
+                if (item.nameId == "Watering Can")
+                {
+                    WateringCan wateringCan = new(item.nameId, item.itemDescription);
+                    _items.Add(i, wateringCan);
+                    InventoryUIController.Instance.AddItem(wateringCan, i);
+                }
+                else
+                {
+                    Item newItem = new(item.nameId, item.itemDescription);
+                    _items.Add(i, newItem);
+                    InventoryUIController.Instance.AddItem(newItem, i);
+                }
+                if (item.gameObject != null)
+                    Destroy(item.gameObject);
                 return;
             }
         }
@@ -74,6 +83,38 @@ public class Inventory : MonoBehaviour
             _items.Remove(fromSlot);
             _items.Add(destinySlot, itemMoved);
             return false;
+        }
+    }
+
+    public void TreantInteraction()
+    {
+        for (int i = 0; i < _inventorySize; i++)
+        {
+            if (_items.ContainsKey(i))
+            {
+                RemoveItem(i, true);
+            }
+        }
+
+        foreach (GameObject itemPrefab in DropController.Instance.itemPrefabs)
+        {
+            if (itemPrefab.name == "Watering Can")
+            {
+                Item item = itemPrefab.GetComponent<Item>();
+                AddItem(new WateringCan(item.nameId, item.itemDescription));
+                return;
+            }
+        }
+    }
+
+    public void UnlockWateringCan(bool value)
+    {
+        foreach (Item item in _items.Values)
+        {
+            if (item.nameId == "Watering Can")
+            {
+                item.usable = value;
+            }
         }
     }
 }

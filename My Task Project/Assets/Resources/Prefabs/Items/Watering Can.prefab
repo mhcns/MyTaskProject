@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 256863047369692178}
   - component: {fileID: 5671305099036896332}
-  - component: {fileID: 1666188827256172188}
   - component: {fileID: 8333263787038009271}
+  - component: {fileID: 3371558045724525030}
   m_Layer: 0
-  m_Name: Flower
+  m_Name: Watering Can
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 21300000, guid: a0aa00ecc03e09248999d41483d3605d, type: 3}
+  m_Sprite: {fileID: 6497910001004034614, guid: bc618dcf9ef1a1b43826a7789a0957d9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -93,21 +93,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1666188827256172188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2727400243706203716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27870b68297546b45abfa356269f86d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Item
-  nameId: Flower
-  itemDescription: ' You found the flower! This is to thank you for your time, and
-    this opportunity!'
 --- !u!58 &8333263787038009271
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -144,6 +129,21 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &3371558045724525030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2727400243706203716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b4e0e0aa02c3bf4ba06e9613cfd81be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WateringCan
+  nameId: Watering Can
+  itemDescription: ' A perfectly ordinary watering can, it is even filled with water!'
+  usable: 0
 --- !u!1 &6766518759349999241
 GameObject:
   m_ObjectHideFlags: 0

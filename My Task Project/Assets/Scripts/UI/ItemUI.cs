@@ -3,7 +3,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class ItemUI
+    : MonoBehaviour,
+        IDragHandler,
+        IBeginDragHandler,
+        IEndDragHandler,
+        IPointerClickHandler
 {
     private GraphicRaycaster _graphicRaycaster;
     private RectTransform _rectTransform;
@@ -38,7 +43,7 @@ public class ItemUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHa
 
     public void Reset()
     {
-        if (!transform.parent.TryGetComponent<SlotUI>(out _))
+        if (transform.parent.TryGetComponent<SlotUI>(out _))
             return;
 
         _graphicRaycaster.enabled = true;
@@ -50,5 +55,17 @@ public class ItemUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHa
     void OnDestroy()
     {
         InventoryUIController.Instance.OnCloseInventory -= Reset;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log($"click no item");
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            Debug.Log($"chama useItem");
+            InventoryUIController.Instance.UseItem(
+                transform.parent.GetComponent<SlotUI>().slotPosition
+            );
+        }
     }
 }

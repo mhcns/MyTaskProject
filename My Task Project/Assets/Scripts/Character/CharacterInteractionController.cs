@@ -14,16 +14,6 @@ public class CharacterInteractionController : MonoBehaviour
         _inventory = GetComponent<Inventory>();
     }
 
-    void Start()
-    {
-        var a = GetComponent<PlayerInput>().actions;
-        foreach (var act in a)
-        {
-            Debug.Log("Action carregada: " + act.name);
-            Debug.Log("Action habilitada: " + act.enabled);
-        }
-    }
-
     // If the player walks into a interaction trigger, puts into a priority list (works like a queue);
     // If the gameObject of said trigger is the first, activate its Interaction Text;
     void OnTriggerEnter2D(Collider2D collision)
@@ -35,6 +25,10 @@ public class CharacterInteractionController : MonoBehaviour
             {
                 _interactionList[0].transform.Find("Interaction Text").gameObject.SetActive(true);
             }
+        }
+        else if (collision.gameObject.CompareTag("Finish"))
+        {
+            _inventory.UnlockWateringCan(true);
         }
     }
 
@@ -58,6 +52,11 @@ public class CharacterInteractionController : MonoBehaviour
                 _interactionList[0].transform.Find("Interaction Text").gameObject.SetActive(true);
             }
         }
+
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            _inventory.UnlockWateringCan(false);
+        }
     }
 
     public void OnInteract(UnityEngine.InputSystem.InputValue value)
@@ -71,8 +70,7 @@ public class CharacterInteractionController : MonoBehaviour
                 _inventory.AddItem(_interactionList[0].GetComponent<Item>());
                 break;
             case "NPC":
-                // TODO: implement NPC dialogue;
-                // throw the interaction to the end of the list, so the player may interact with items dropped near NPCs;
+                _interactionList[0].GetComponent<NpcController>().Interact(_inventory.items.Count);
                 break;
         }
     }
