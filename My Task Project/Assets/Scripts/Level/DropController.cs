@@ -6,13 +6,13 @@ using UnityEngine;
 public class DropController : MonoBehaviour
 {
     public static DropController Instance;
-    private GameObject[] _itemPrefabs;
+    public GameObject[] _itemPrefabs;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         InitSingleton();
-        _itemPrefabs = Resources.LoadAll<GameObject>("Items");
+        _itemPrefabs = Resources.LoadAll<GameObject>("Prefabs/Items");
     }
 
     private void InitSingleton()

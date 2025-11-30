@@ -4,8 +4,8 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     private int _inventorySize;
-    private Dictionary<int, Item> _items;
-    public Dictionary<int, Item> items => items;
+    private Dictionary<int, Item> _items = new();
+    public Dictionary<int, Item> items => _items;
 
     void Start()
     {
@@ -27,9 +27,11 @@ public class Inventory : MonoBehaviour
             if (!_items.ContainsKey(i))
             {
                 Item newItem = new(item.nameId, item.itemDescription);
+                Debug.Log($"adding {newItem.nameId} to slot {i}");
                 _items.Add(i, newItem);
+                InventoryUIController.Instance.AddItem(newItem, i);
                 Destroy(item.gameObject);
-                //
+                return;
             }
         }
     }
@@ -47,6 +49,7 @@ public class Inventory : MonoBehaviour
             Item removedItem = new(_items[slot].nameId, _items[slot].itemDescription);
             DropController.Instance.DropItem(removedItem, transform.position);
         }
+        InventoryUIController.Instance.RemoveItem(slot);
         _items.Remove(slot);
     }
 

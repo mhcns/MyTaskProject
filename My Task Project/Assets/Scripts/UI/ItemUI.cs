@@ -1,22 +1,27 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
-public class ItemUI : MonoBehaviour, IDragHandler
+public class ItemUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    public CanvasGroup canvasGroup;
-    public int lastSlot;
+    private GraphicRaycaster _graphicRaycaster;
+    private RectTransform _rectTransform;
+    public int lastSlot = -1;
 
     void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        _graphicRaycaster = GetComponent<GraphicRaycaster>();
+        _rectTransform = GetComponent<RectTransform>();
+        _rectTransform.GetComponent<RawImage>().SetNativeSize();
+        _rectTransform.localScale = Vector3.one * 5f; // Value that makes the Image fill the slot
+        InventoryUIController.Instance.OnCloseInventory += Reset;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = false;
+        _graphicRaycaster.enabled = false;
+        InventoryUIController.Instance.ToggleRaycaster(true);
         lastSlot = transform.parent.GetComponent<SlotUI>().slotPosition;
         transform.parent = transform.parent.parent;
     }
@@ -28,6 +33,22 @@ public class ItemUI : MonoBehaviour, IDragHandler
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true;
+        _graphicRaycaster.enabled = true;
+    }
+
+    public void Reset()
+    {
+        if (!transform.parent.TryGetComponent<SlotUI>(out _))
+            return;
+
+        _graphicRaycaster.enabled = true;
+        transform.parent = InventoryUIController.Instance.inventorySlotsUI[lastSlot].transform;
+        transform.position = transform.parent.position;
+        lastSlot = -1;
+    }
+
+    void OnDestroy()
+    {
+        InventoryUIController.Instance.OnCloseInventory -= Reset;
     }
 }
