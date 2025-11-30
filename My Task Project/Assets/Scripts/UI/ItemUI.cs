@@ -38,7 +38,7 @@ public class ItemUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHa
 
     public void Reset()
     {
-        if (!transform.parent.TryGetComponent<SlotUI>(out _))
+        if (transform.parent.TryGetComponent<SlotUI>(out _))
             return;
 
         _graphicRaycaster.enabled = true;

@@ -23,6 +23,9 @@ public class CharacterMovementController : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
+        if (DialogueUIController.IsActive())
+            return;
+
         _inputVector = value.Get<Vector2>();
         _animatorController.Move(_inputVector);
     }

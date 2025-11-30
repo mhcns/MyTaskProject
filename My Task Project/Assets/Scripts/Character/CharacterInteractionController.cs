@@ -71,8 +71,7 @@ public class CharacterInteractionController : MonoBehaviour
                 _inventory.AddItem(_interactionList[0].GetComponent<Item>());
                 break;
             case "NPC":
-                // TODO: implement NPC dialogue;
-                // throw the interaction to the end of the list, so the player may interact with items dropped near NPCs;
+                _interactionList[0].GetComponent<NpcController>().Interact();
                 break;
         }
     }

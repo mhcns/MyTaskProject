@@ -103,12 +103,15 @@ public class InventoryUIController : MonoBehaviour
 
     public void ToggleInventory()
     {
+        if (DialogueUIController.IsActive())
+            return;
+
         _backgroundObject.SetActive(!_backgroundObject.activeSelf);
         _discardZone.SetActive(_backgroundObject.activeSelf);
 
         if (!_backgroundObject.activeSelf)
         {
-            OnCloseInventory.Invoke();
+            OnCloseInventory?.Invoke();
         }
     }
 
@@ -119,8 +122,11 @@ public class InventoryUIController : MonoBehaviour
 
     public void CloseButton()
     {
+        if (!_backgroundObject.activeSelf)
+            return;
+
         _backgroundObject.SetActive(false);
         _discardZone.SetActive(false);
-        OnCloseInventory.Invoke();
+        OnCloseInventory?.Invoke();
     }
 }

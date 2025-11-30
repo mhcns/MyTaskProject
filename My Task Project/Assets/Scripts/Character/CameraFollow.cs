@@ -9,7 +9,7 @@ public class CameraFollow : MonoBehaviour
     private float _defaultCameraSize = 6f;
     private float _targetCameraSize = 6f;
 
-    public float followUpdateTime = 1 / 10f; // Arbitrary default value
+    public float followUpdateTime = 1 / 5f;
 
     void Start()
     {
@@ -32,9 +32,15 @@ public class CameraFollow : MonoBehaviour
         );
     }
 
-    public void SetCameraTarget(Transform target, float targetCameraSize)
+    public void SetCameraTarget(Transform target, float targetCameraSize = 3f)
     {
         targetTransform = target;
         _targetCameraSize = targetCameraSize;
+    }
+
+    public void ResetCameraTarget()
+    {
+        targetTransform = _playerTransform;
+        _targetCameraSize = _defaultCameraSize;
     }
 }

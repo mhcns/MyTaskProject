@@ -13,14 +13,17 @@ public class NpcController : MonoBehaviour
         transform.Find("Interaction Text").GetComponent<MeshRenderer>().sortingOrder = 4;
     }
 
-    public void OnInteract(InputValue inputValue)
+    public void Interact()
     {
+        InventoryUIController.Instance.CloseButton();
         if (_currentLine < _dialogues.Count)
         {
-            DialogueUIController.Instance.ShowDialogue(_dialogues[_currentLine]);
+            Camera.main.GetComponent<CameraFollow>().SetCameraTarget(transform);
+            DialogueUIController.Instance.ShowDialogue(name, _dialogues[_currentLine]);
         }
         else
         {
+            Camera.main.GetComponent<CameraFollow>().ResetCameraTarget();
             DialogueUIController.Instance.EndConversation();
             _currentLine = 0;
             return;
