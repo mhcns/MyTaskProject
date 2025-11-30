@@ -14,7 +14,6 @@ public class AnimatorController : MonoBehaviour
 
     public void Move(Vector2 moveDirection)
     {
-        Debug.Log($"moveDirection {moveDirection}");
         if (moveDirection == Vector2.zero)
         {
             // Idle animation
