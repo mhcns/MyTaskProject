@@ -54,17 +54,18 @@ public class InventoryUIController : MonoBehaviour
 
     public void MoveItem(GameObject itemObject, int fromSlot, int destinySlot)
     {
-        bool moveCompleted = _playerInventory.MoveItem(fromSlot, destinySlot);
-        if (moveCompleted)
+        bool swappedItems = _playerInventory.MoveItem(fromSlot, destinySlot);
+        if (swappedItems)
         {
-            itemObject.transform.parent = _inventorySlotsUI[destinySlot].transform;
-            itemObject.transform.position = _inventorySlotsUI[destinySlot].transform.position;
+            _inventorySlotsUI[destinySlot].transform.GetChild(0).parent = _inventorySlotsUI[
+                fromSlot
+            ].transform;
+            _inventorySlotsUI[fromSlot].transform.GetChild(0).position = _inventorySlotsUI[fromSlot]
+                .transform
+                .position;
         }
-        else
-        {
-            itemObject.transform.parent = _inventorySlotsUI[fromSlot].transform;
-            itemObject.transform.position = _inventorySlotsUI[fromSlot].transform.position;
-        }
+        itemObject.transform.parent = _inventorySlotsUI[destinySlot].transform;
+        itemObject.transform.position = _inventorySlotsUI[destinySlot].transform.position;
     }
 
     public void AddItem(Item item, int slot)
@@ -100,9 +101,8 @@ public class InventoryUIController : MonoBehaviour
         }
     }
 
-    public void OnToggleInventory(UnityEngine.InputSystem.InputValue value)
+    public void ToggleInventory()
     {
-        Debug.Log($"Toggle Inventory");
         _backgroundObject.SetActive(!_backgroundObject.activeSelf);
         _discardZone.SetActive(_backgroundObject.activeSelf);
 

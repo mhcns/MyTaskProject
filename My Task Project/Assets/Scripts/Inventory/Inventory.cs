@@ -55,12 +55,25 @@ public class Inventory : MonoBehaviour
 
     public bool MoveItem(int fromSlot, int destinySlot)
     {
+        // if there is already an item on destiny slot, swap them
         if (_items.ContainsKey(destinySlot))
-            return false;
+        {
+            Item fromItem = _items[fromSlot];
+            Item destinyItem = _items[destinySlot];
 
-        Item itemMoved = _items[fromSlot];
-        _items.Remove(fromSlot);
-        _items.Add(destinySlot, itemMoved);
-        return true;
+            _items.Remove(fromSlot);
+            _items.Remove(destinySlot);
+
+            _items.Add(destinySlot, fromItem);
+            _items.Add(fromSlot, destinyItem);
+            return true;
+        }
+        else
+        {
+            Item itemMoved = _items[fromSlot];
+            _items.Remove(fromSlot);
+            _items.Add(destinySlot, itemMoved);
+            return false;
+        }
     }
 }

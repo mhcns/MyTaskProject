@@ -20,6 +20,7 @@ public class CharacterInteractionController : MonoBehaviour
         foreach (var act in a)
         {
             Debug.Log("Action carregada: " + act.name);
+            Debug.Log("Action habilitada: " + act.enabled);
         }
     }
 
@@ -74,5 +75,10 @@ public class CharacterInteractionController : MonoBehaviour
                 // throw the interaction to the end of the list, so the player may interact with items dropped near NPCs;
                 break;
         }
+    }
+
+    public void OnToggleInventory(UnityEngine.InputSystem.InputValue value)
+    {
+        InventoryUIController.Instance.ToggleInventory();
     }
 }
