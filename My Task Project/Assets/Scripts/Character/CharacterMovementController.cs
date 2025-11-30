@@ -9,6 +9,8 @@ public class CharacterMovementController : MonoBehaviour
     private Vector2 _inputVector;
     private Vector3 _forceDirection;
 
+    private float _zAxisOffset = 0.3f; // Offset to fix the depth effect
+
     [SerializeField]
     private float _acceleration;
 
@@ -51,5 +53,14 @@ public class CharacterMovementController : MonoBehaviour
                 _acceleration
             );
         }
+
+        // Adjusts the position so it gives the impression of depth when walking by
+        // elements in the same layer order;
+        // Implemented on items and NPCs aswell
+        transform.position = new(
+            transform.position.x,
+            transform.position.y,
+            transform.position.y + _zAxisOffset
+        );
     }
 }

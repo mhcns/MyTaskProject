@@ -67,7 +67,10 @@ public class CharacterInteractionController : MonoBehaviour
         switch (_interactionList[0].tag)
         {
             case "Item":
-                _inventory.AddItem(_interactionList[0].GetComponent<Item>());
+                _inventory.CheckAddItem(
+                    _interactionList[0].GetComponent<Item>(),
+                    _interactionList[0]
+                );
                 break;
             case "NPC":
                 _interactionList[0].GetComponent<NpcController>().Interact(_inventory.items.Count);
