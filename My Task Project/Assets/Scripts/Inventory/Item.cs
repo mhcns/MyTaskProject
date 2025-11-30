@@ -10,6 +10,7 @@ public class Item : MonoBehaviour
     void OnEnable()
     {
         transform.Find("Interaction Text").GetComponent<MeshRenderer>().sortingOrder = 4;
+        transform.position = new(transform.position.x, transform.position.y, transform.position.y);
     }
 
     public Item(string nameId, string itemDescription, bool usable = false)

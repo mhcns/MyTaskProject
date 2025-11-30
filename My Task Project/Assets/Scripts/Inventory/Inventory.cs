@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -6,43 +9,95 @@ public class Inventory : MonoBehaviour
     private int _inventorySize;
     private Dictionary<int, Item> _items = new();
     public Dictionary<int, Item> items => _items;
+    public Action OnInventoryChange;
+    private Coroutine _saveCoroutine;
+    private static WaitForSeconds _waitForSeconds0_3 = new WaitForSeconds(0.3f);
+    private bool _loadedInventory = false;
 
     void Start()
     {
         _inventorySize = 8;
-        // Implement load inventory later
+        OnInventoryChange += SaveData;
     }
 
-    // Adds 'item' to the first empty slot in the inventory;
-    public void AddItem(Item item)
+    void Update()
     {
-        if (_items.Count >= _inventorySize)
+        if (!_loadedInventory && InventoryUIController.Instance != null)
         {
-            // Inventory is full message;
+            LoadInventory();
+            _loadedInventory = true;
+        }
+    }
+
+    private void LoadInventory()
+    {
+        SaveData savedData = SaveSystem.Load();
+
+        Debug.Log($"data loaded");
+
+        if (savedData.inventory == null || savedData.inventory.Count == 0)
+        {
+            Debug.Log(
+                $"inventory null: {savedData.inventory == null} || {savedData.inventory.Count == 0}"
+            );
             return;
         }
 
-        for (int i = 0; i < _inventorySize; i++)
+        foreach (InventorySlot slotItem in savedData.inventory)
         {
-            if (!_items.ContainsKey(i))
+            Item savedItem = new(slotItem.item[0], slotItem.item[1]);
+            CheckAddItem(savedItem, null, slotItem.slotId);
+        }
+    }
+
+    // Checks if its possible to add Items to the inventory;
+    public void CheckAddItem(Item item, GameObject itemObject, int slot = -1)
+    {
+        if (_items.Count >= _inventorySize)
+        {
+            Debug.LogError("Inventory is full");
+            return;
+        }
+
+        // Adds 'item' to the first empty slot in the inventory if the slot wasn't already set;
+        if (slot < 0)
+        {
+            for (int i = 0; i < _inventorySize; i++)
             {
-                if (item.nameId == "Watering Can")
+                if (!_items.ContainsKey(i))
                 {
-                    WateringCan wateringCan = new(item.nameId, item.itemDescription);
-                    _items.Add(i, wateringCan);
-                    InventoryUIController.Instance.AddItem(wateringCan, i);
+                    AddItem(item, itemObject, i);
+                    return;
                 }
-                else
-                {
-                    Item newItem = new(item.nameId, item.itemDescription);
-                    _items.Add(i, newItem);
-                    InventoryUIController.Instance.AddItem(newItem, i);
-                }
-                if (item.gameObject != null)
-                    Destroy(item.gameObject);
-                return;
             }
         }
+        else
+        {
+            Debug.Log($"add item {!_items.ContainsKey(slot)}");
+            if (!_items.ContainsKey(slot))
+                AddItem(item, itemObject, slot);
+        }
+    }
+
+    private void AddItem(Item item, GameObject itemObject, int slot)
+    {
+        if (item.nameId == "Watering Can")
+        {
+            WateringCan wateringCan = new(item.nameId, item.itemDescription);
+            _items.Add(slot, wateringCan);
+            InventoryUIController.Instance.AddItem(wateringCan, slot);
+        }
+        else
+        {
+            Item newItem = new(item.nameId, item.itemDescription);
+            _items.Add(slot, newItem);
+            InventoryUIController.Instance.AddItem(newItem, slot);
+        }
+
+        if (itemObject != null)
+            Destroy(itemObject);
+
+        OnInventoryChange?.Invoke();
     }
 
     public void RemoveItem(int slot, bool usedItem = false)
@@ -60,10 +115,12 @@ public class Inventory : MonoBehaviour
         }
         InventoryUIController.Instance.RemoveItem(slot);
         _items.Remove(slot);
+        OnInventoryChange?.Invoke();
     }
 
     public bool MoveItem(int fromSlot, int destinySlot)
     {
+        bool swappedItems;
         // if there is already an item on destiny slot, swap them
         if (_items.ContainsKey(destinySlot))
         {
@@ -75,15 +132,17 @@ public class Inventory : MonoBehaviour
 
             _items.Add(destinySlot, fromItem);
             _items.Add(fromSlot, destinyItem);
-            return true;
+            swappedItems = true;
         }
         else
         {
             Item itemMoved = _items[fromSlot];
             _items.Remove(fromSlot);
             _items.Add(destinySlot, itemMoved);
-            return false;
+            swappedItems = false;
         }
+        OnInventoryChange?.Invoke();
+        return swappedItems;
     }
 
     public void TreantInteraction()
@@ -101,7 +160,7 @@ public class Inventory : MonoBehaviour
             if (itemPrefab.name == "Watering Can")
             {
                 Item item = itemPrefab.GetComponent<Item>();
-                AddItem(new WateringCan(item.nameId, item.itemDescription));
+                CheckAddItem(new WateringCan(item.nameId, item.itemDescription), null);
                 return;
             }
         }
@@ -116,5 +175,31 @@ public class Inventory : MonoBehaviour
                 item.usable = value;
             }
         }
+    }
+
+    private void SaveData()
+    {
+        if (_saveCoroutine != null)
+        {
+            StopCoroutine(_saveCoroutine);
+        }
+
+        _saveCoroutine = StartCoroutine(SaveCoroutine());
+    }
+
+    // Save coroutine so it doesn't spam saving in case multiple changes to the inventory are made in sequence;
+    private IEnumerator SaveCoroutine()
+    {
+        yield return _waitForSeconds0_3;
+        SaveData data = new SaveData();
+        data.inventory = new();
+        string[] tempArray = new string[2];
+        foreach (KeyValuePair<int, Item> item in _items)
+        {
+            tempArray[0] = item.Value.nameId;
+            tempArray[1] = item.Value.itemDescription;
+            data.inventory.Add(new InventorySlot { slotId = item.Key, item = tempArray });
+        }
+        SaveSystem.Save(data);
     }
 }

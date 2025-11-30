@@ -18,12 +18,13 @@ public class NpcController : MonoBehaviour
     void OnEnable()
     {
         transform.Find("Interaction Text").GetComponent<MeshRenderer>().sortingOrder = 4;
+        transform.position = new(transform.position.x, transform.position.y, transform.position.y);
     }
 
     public void Interact(int coinsCount)
     {
         List<string> currentDialogue;
-        if (coinsCount == 5 && name == "Treant")
+        if (coinsCount >= 5 && name == "Treant")
             currentDialogue = _conditionalDialogue;
         else if (_timesInteracted >= 10)
             currentDialogue = _secretDialogue;
