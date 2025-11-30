@@ -186,11 +186,9 @@ public class Inventory : MonoBehaviour
         yield return _waitForSeconds0_3;
         SaveData data = new SaveData();
         data.inventory = new();
-        string[] tempArray = new string[2];
         foreach (KeyValuePair<int, Item> item in _items)
         {
-            tempArray[0] = item.Value.nameId;
-            tempArray[1] = item.Value.itemDescription;
+            string[] tempArray = new string[2] { item.Value.nameId, item.Value.itemDescription };
             data.inventory.Add(new InventorySlot { slotId = item.Key, item = tempArray });
         }
         SaveSystem.Save(data);

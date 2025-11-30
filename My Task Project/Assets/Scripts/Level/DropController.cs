@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Mono.Cecil;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DropController : MonoBehaviour
