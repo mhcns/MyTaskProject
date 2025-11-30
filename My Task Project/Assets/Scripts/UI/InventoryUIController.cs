@@ -129,4 +129,19 @@ public class InventoryUIController : MonoBehaviour
         _discardZone.SetActive(false);
         OnCloseInventory?.Invoke();
     }
+
+    public void UseItem(int slot)
+    {
+        Debug.Log($"item: {_playerInventory.items[slot].nameId}");
+        bool itemUsed = false;
+        if (_playerInventory.items[slot] is WateringCan)
+        {
+            Debug.Log($"item is WateringCan");
+            itemUsed = (_playerInventory.items[slot] as WateringCan).UseItem();
+        }
+        if (!itemUsed)
+            return;
+
+        _playerInventory.RemoveItem(slot, true);
+    }
 }
