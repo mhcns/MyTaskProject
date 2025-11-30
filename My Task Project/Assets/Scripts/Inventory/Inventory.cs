@@ -45,7 +45,19 @@ public class Inventory : MonoBehaviour
         if (!usedItem)
         {
             Item removedItem = new(_items[slot].nameId, _items[slot].itemDescription);
+            DropController.Instance.DropItem(removedItem, transform.position);
         }
         _items.Remove(slot);
+    }
+
+    public bool MoveItem(int fromSlot, int destinySlot)
+    {
+        if (_items.ContainsKey(destinySlot))
+            return false;
+
+        Item itemMoved = _items[fromSlot];
+        _items.Remove(fromSlot);
+        _items.Add(destinySlot, itemMoved);
+        return true;
     }
 }
