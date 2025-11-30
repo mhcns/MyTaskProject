@@ -32,14 +32,8 @@ public class Inventory : MonoBehaviour
     private void LoadInventory()
     {
         SaveData savedData = SaveSystem.Load();
-
-        Debug.Log($"data loaded");
-
         if (savedData.inventory == null || savedData.inventory.Count == 0)
         {
-            Debug.Log(
-                $"inventory null: {savedData.inventory == null} || {savedData.inventory.Count == 0}"
-            );
             return;
         }
 
@@ -73,7 +67,6 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            Debug.Log($"add item {!_items.ContainsKey(slot)}");
             if (!_items.ContainsKey(slot))
                 AddItem(item, itemObject, slot);
         }
